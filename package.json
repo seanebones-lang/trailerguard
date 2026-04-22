@@ -1,0 +1,14 @@
+{
+  "name": "trailerguard",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "mobile:start": "npm run start --workspace mobile",
+    "mobile:android": "npm run android --workspace mobile",
+    "mobile:ios": "npm run ios --workspace mobile",
+    "mobile:web": "npm run web --workspace mobile"
+  }
+}

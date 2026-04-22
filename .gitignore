@@ -1,0 +1,17 @@
+node_modules/
+**/node_modules/
+.DS_Store
+
+# Env
+.env
+*.env
+!*.env.example
+
+# Expo / Metro
+.expo/
+dist/
+web-build/
+
+# Native generated
+android/
+ios/
