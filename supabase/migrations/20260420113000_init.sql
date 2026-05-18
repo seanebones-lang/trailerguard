@@ -30,6 +30,29 @@ create unique index if not exists mileage_events_trip_hash_idx
 alter table public.trailers enable row level security;
 alter table public.mileage_events enable row level security;
 
+-- RLS Policies (recommendation from review - strict owner-based access)
+create policy "Users can view own trailers" on public.trailers
+  for select using (auth.uid() = owner_id);
+
+create policy "Users can insert own trailers" on public.trailers
+  for insert with check (auth.uid() = owner_id);
+
+create policy "Users can update own trailers" on public.trailers
+  for update using (auth.uid() = owner_id) with check (auth.uid() = owner_id);
+
+create policy "Users can view own mileage" on public.mileage_events
+  for select using (exists (
+    select 1 from public.trailers 
+    where id = trailer_id and owner_id = auth.uid()
+  ));
+
+create policy "Users can insert own mileage" on public.mileage_events
+  for insert with check (exists (
+    select 1 from public.trailers 
+    where id = trailer_id and owner_id = auth.uid()
+  ));
+
+-- Immutable functions and triggers (already strong)
 create or replace function public.prevent_identity_mutation()
 returns trigger as $$
 begin
@@ -62,3 +85,6 @@ drop trigger if exists mileage_events_no_delete on public.mileage_events;
 create trigger mileage_events_no_delete
 before delete on public.mileage_events
 for each row execute procedure public.prevent_mileage_update_delete();
+
+-- Enable realtime for alerts and status (recommendation)
+alter publication supabase_realtime add table trailers, mileage_events;
