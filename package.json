@@ -9,6 +9,8 @@
     "mobile:start": "npm run start --workspace mobile",
     "mobile:android": "npm run android --workspace mobile",
     "mobile:ios": "npm run ios --workspace mobile",
-    "mobile:web": "npm run web --workspace mobile"
+    "mobile:web": "npm run web --workspace mobile",
+    "web-admin:dev": "npm run dev --workspace=web-admin",
+    "web-admin:build": "npm run build --workspace=web-admin"
   }
 }
